@@ -1,13 +1,11 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import Profile from "./Profile";
+import Dashboard from "./Dashboard";
 
 const Home = () => {
   return (
     <div>
-      <Navbar/>
-      <h1>Welcome to Home Page</h1>
-      <Profile/>
+      <Dashboard />
     </div>
   );
 };
