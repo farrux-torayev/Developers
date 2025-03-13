@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const navigate = useNavigate(); // useNavigate hook'ini ishlatamiz
+  const navigate = useNavigate(); 
 
   return (
     <div>
@@ -12,7 +12,6 @@ const Dashboard = () => {
       <div className="flex flex-col  p-8 ml-[210px]">
         <div className="bg-white  w-[600px] rounded-lg">
           <h2 className="text-[#17a2b8]  text-[50px] font-[700]">Dashboard</h2>
-          {/* {error && <p className="text-red-500 text-center">{error}</p>} */}
           <div className="flex items-center py-2 ">
             <FaUser className="mr-3 w-6 h-6" />
             <h2 className="text-[26px]  ">Welcome Farrux</h2>

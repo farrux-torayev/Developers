@@ -17,7 +17,6 @@ const CreateProfile = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Data Submitted:", formData);
-   
   };
 
   return (
@@ -28,7 +27,6 @@ const CreateProfile = () => {
           <h2 className="text-[#17a2b8]  text-[50px] font-[700]">
             Create Your Profile
           </h2>
-          {/* {error && <p className="text-red-500 text-center">{error}</p>} */}
           <div className="flex items-center w-[1036px] py-2 ">
             <FaUser className="mr-3 w-6 h-6" />
             <h2 className="text-[26px]  ">
@@ -128,8 +126,6 @@ const CreateProfile = () => {
               username
             </p>
             <textarea
-              // value={text}
-              // onChange={(e) => setText(e.target.value)}
               placeholder="A short bio of yourself"
               rows="5"
               cols="109 "
@@ -140,8 +136,10 @@ const CreateProfile = () => {
               Tell us a little about yourself
             </p>
           </div>
-          <div> 
-            <button className="border-[#f4f4f4] border py-[5px] px-[20px] bg-[#f4f4f4]">Add Social Network Links</button>
+          <div>
+            <button className="border-[#f4f4f4] border py-[5px] px-[20px] bg-[#f4f4f4]">
+              Add Social Network Links
+            </button>
             <span className="ml-[20px] ">Optional</span>
           </div>
           <div className="flex gap-[10px] ">
