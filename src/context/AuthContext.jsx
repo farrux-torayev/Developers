@@ -34,3 +34,23 @@ export const AuthProvider = ({ children }) => {
 };
 
 export default AuthContext;
+
+// import { createContext, useState, useEffect } from "react";
+
+// const AuthContext = createContext();
+
+// export const AuthProvider = ({ children }) => {
+//   const [token, setToken] = useState(localStorage.getItem("token") || null);
+
+//   useEffect(() => {
+//     localStorage.setItem("token", token);
+//   }, [token]);
+
+//   return (
+//     <AuthContext.Provider value={{ token, setToken }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export default AuthContext;
