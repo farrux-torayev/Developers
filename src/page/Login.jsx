@@ -32,11 +32,11 @@ const Login = () => {
       console.log("Server javobi:", response.token);
 
       localStorage.setItem("token", response.token);
-      navigate("/developers ");
+      navigate("/developers");
 
       if (response?.token) {
-        // setToken(response.token);
-        // setUser(response.user || {});
+        setToken(response.token);
+        setUser(response.user || {});
         localStorage.setItem("user", JSON.stringify(response.user || {}));
       } else {
         setError(response?.message || "Email yoki parol noto‘g‘ri.");
