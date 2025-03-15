@@ -19,6 +19,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     setError("");
 
     if (!formData.email.trim() || !formData.password.trim()) {
@@ -28,15 +29,15 @@ const Login = () => {
 
     try {
       const response = await login(formData);
-      console.log("Server javobi:", response);
+      console.log("Server javobi:", response.token);
+
+      localStorage.setItem("token", response.token);
+      navigate("/developers ");
 
       if (response?.token) {
-        setToken(response.token);
-        setUser(response.user || {});
-        localStorage.setItem("token", response.token);
+        // setToken(response.token);
+        // setUser(response.user || {});
         localStorage.setItem("user", JSON.stringify(response.user || {}));
-
-        navigate("/");
       } else {
         setError(response?.message || "Email yoki parol noto‘g‘ri.");
       }

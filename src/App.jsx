@@ -18,8 +18,8 @@ function App() {
         <Route path="/createProfile" element={<CreateProfile />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/posts" element={<Posts />} />
-        <Route path="/register" element={<Register />} />
       </Route>
+        <Route path="/register" element={<Register />} />
     </Routes>
   );
 }
