@@ -16,6 +16,7 @@ const Navbar = () => {
         <ul className="flex gap-[10px]">
           <li>
             <NavLink to={"/developers"} className="text-white p-[8px] text-[18px] hover:text-[#17a2b8]">Developers</NavLink>
+            <NavLink to={"/dashboard"} className="text-white p-[8px] text-[18px] hover:text-[#17a2b8]">Dashboard</NavLink>
             <NavLink to={"/posts"} className="text-white p-[8px] text-[18px] hover:text-[#17a2b8]">Posts</NavLink>
           </li>
           <li>

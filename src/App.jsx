@@ -7,6 +7,7 @@ import Developers from "./components/Developers";
 import Dashboard from "./page/Dashboard";
 import CreateProfile from "./components/CreateProfile";
 import ProtectedRoute from "./router/ProtectedRoute";
+import Card from "./components/Card";
 
 function App() {
   return (
@@ -18,8 +19,9 @@ function App() {
         <Route path="/createProfile" element={<CreateProfile />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/posts" element={<Posts />} />
+        <Route path="/card/:postId" element={<Card />} /> 
       </Route>
-        <Route path="/register" element={<Register />} />
+      <Route path="/register" element={<Register />} />
     </Routes>
   );
 }

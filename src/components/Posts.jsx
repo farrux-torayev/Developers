@@ -4,14 +4,16 @@ import AuthContext from "../context/AuthContext";
 import Navbar from "./Navbar";
 import Loading from "./Loading";
 import { FaUser } from "react-icons/fa";
-import { BiSolidDislike, BiSolidLike } from "react-icons/bi";
 import { toast } from "react-toastify";
+import LikeButton from "./LikeButton";
+import { useNavigate } from "react-router-dom";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const { user, token } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getItemPosts() {
@@ -148,15 +150,17 @@ const Posts = () => {
               <p className="text-[#aaa] text-[14px] mb-[5px]">
                 Posted on {new Date(post.date).toLocaleDateString("uz-UZ")}
               </p>
-              <div className="flex gap-[8px]">
-                <BiSolidLike className="w-[57px] h-[38.4px] p-[7px] border-[#f4f4f4] border bg-[#f4f4f4]" />
-                <BiSolidDislike className="w-[57px] h-[38.4px] p-[7px] border-[#f4f4f4] border bg-[#f4f4f4]" />
-                <button className="w-[119px] bg-[#17a2b8] text-white h-[38.4px] p-[7px] border-[#17a2b8]">
+              <div className="flex gap-[8px] items-center">
+                <LikeButton postId={post._id} token={token} />
+                <button
+                  onClick={() => navigate(`/card/${post._id}`)}
+                  className="w-[119px] bg-[#17a2b8] text-white h-[38.4px] p-[7px] border-[#17a2b8]"
+                >
                   Discussion
                 </button>
                 {user && post.user === user._id && (
                   <button
-                    className="bg-red-500 text-white cursor-pointer px-4 py-1"
+                    className="bg-red-500 w-[100px] h-[40px] text-white cursor-pointer px-4 py-1"
                     onClick={() => handleDelete(post._id)}
                   >
                     O'chirish
