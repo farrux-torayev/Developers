@@ -2,72 +2,61 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { BiSolidLike, BiSolidDislike } from "react-icons/bi";
+import {
+  useGetPostMutation,
+  useHandleLikeMutation,
+  useHandleUnlikeMutation,
+} from "../redux/getPosts";
 
 export default function LikeButton({ postId, token, userId }) {
   const [liked, setLiked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
-//   useEffect(() => {
-//     const fetchPostData = async () => {
-//       try {
-//         const res = await axios.get(
-//           `https://nt-devconnector.onrender.com/api/posts/${postId}`,
-//           {
-//             headers: { "x-auth-token": token },
-//           }
-//         );
-//         setLikeCount(res.data.likes.length);
-//         setLiked(res.data.likes.some((like) => like.user === userId));
-//       } catch (error) {
-//         console.error("Post malumotini olishda xato:", error);
-//       }
-//     };
-//     fetchPostData();
-//   }, [postId, token, userId]);
-  const handleLike = async () => {
-    setLoading(true);
+
+  const [getPost] = useGetPostMutation()
+  const [handleLike] = useHandleLikeMutation();
+  const [handleUnlike] = useHandleUnlikeMutation();
+
+  const handleLikeClick = async () => {
+    if (!postId) {
+      console.error("postId topilmadi!");
+      return;
+    }
+
+    console.log("Like bosildi, post ID:", postId);
+
     try {
-      await axios.put(
-        `https://nt-devconnector.onrender.com/api/posts/like/${postId}`,
-        {},
-        {
-          headers: { "x-auth-token": token },
-        }
-      );
+      const response = await handleLike(postId).unwrap();
+      console.log("Like muvaffaqiyatli qo‘shildi!", response);
       toast.success("Like bosildi!");
-      setLiked(true);
       setLikeCount((prev) => prev + 1);
     } catch (error) {
-      console.error("Like bosishda xatolik:", error.response?.data || error);
-      toast.error(error.response?.data?.msg || "Xatolik yuz berdi!");
-    } finally {
-      setLoading(false);
+      console.error("Like qo‘shishda xatolik:", error);
     }
   };
-  const handleUnlike = async () => {
-    setLoading(true);
+
+  const handleUnlikeClick = async () => {
+    if (!postId) {
+      console.error("postId topilmadi!");
+      return;
+    }
+
+    console.log("Unlike bosildi, post ID:", postId);
+
     try {
-      await axios.put(
-        `https://nt-devconnector.onrender.com/api/posts/unlike/${postId}`,
-        {},
-        {
-          headers: { "x-auth-token": token },
-        }
-      );
+      const response = await handleUnlike(postId).unwrap();
+      console.log("Like muvaffaqiyatli olib tashlandi!", response);
       toast.success("Like olib tashlandi!");
-      setLiked(false);
       setLikeCount((prev) => prev - 1);
     } catch (error) {
-      console.error("Unlike bosishda xatolik:", error.response?.data || error);
-      toast.error(error.response?.data?.msg || "Xatolik yuz berdi!");
-    } finally {
-      setLoading(false);
+      console.error("Unlike qilishda xatolik:", error);
     }
   };
+
   return (
     <div className="flex items-center gap-4">
       <button
-        onClick={handleLike}
+        onClick={handleLikeClick}
         className={`p-2  flex items-center gap-2 ${
           liked ? "bg-blue-500 cursor-not-allowed text-white" : "bg-gray-300 "
         }`}
@@ -80,7 +69,7 @@ export default function LikeButton({ postId, token, userId }) {
         )}
       </button>
       <button
-        onClick={handleUnlike}
+        onClick={handleUnlikeClick}
         className={`p-2 flex items-center gap-2 ${
           !liked ? "bg-gray-300 cursor-not-allowed" : "bg-red-500 text-white"
         }`}

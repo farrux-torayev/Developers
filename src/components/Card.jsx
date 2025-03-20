@@ -7,100 +7,126 @@ import { toast } from "react-toastify";
 import Loading from "./Loading";
 import LikeButton from "./LikeButton";
 import AuthContext from "../context/AuthContext";
+import { useGetPostsQuery } from "../redux/getPosts";
 
 const Card = () => {
-  const { postId } = useParams();
-  const navigate = useNavigate();
-  const [post, setPost] = useState(null);
-  const [error, setError] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [text, setText] = useState("");
-  const { user, token } = useContext(AuthContext);
-  const [loading, setLoading] = useState(true);
+  // const { postId } = useParams();
+  // const navigate = useNavigate();
+  // const [post, setPost] = useState(null);
+  // const [error, setError] = useState(null);
+  // const [comments, setComments] = useState([]);
+  // const [text, setText] = useState("");
+  // const { user, token } = useContext(AuthContext);
+  // const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("Siz tizimga kirmagansiz. Iltimos, login qiling!");
-        setTimeout(() => navigate("/login"), 2000);
+  const { data, error, isLoading } = useGetPostsQuery();
+
+  console.log(data);
+
+  // useEffect(() => {
+  //   const fetchPost = async () => {
+  //     const token = localStorage.getItem("token");
+  //     if (!token) {
+  //       setError("Siz tizimga kirmagansiz. Iltimos, login qiling!");
+  //       setTimeout(() => navigate("/login"), 2000);
+  //       return;
+  //     }
+
+  //     try {
+  //       const res = await axios.get(
+  //         `https://nt-devconnector.onrender.com/api/posts/${postId}`,
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             "X-Auth-Token": token,
+  //           },
+  //         }
+  //       );
+  //       setPost(res.data);
+  //       setComments(res.data.comments);
+  //     } catch (err) {
+  //       console.error("Post ma'lumotini olishda xatolik:", err);
+  //       setError("Ma’lumot olishda xatolik yuz berdi!");
+  //     }
+  //   };
+
+  //   fetchPost();
+  // }, [postId, navigate]);
+
+  if (error) return <p>{error}</p>;
+  if (isLoading) return <Loading />;
+
+    const [addPost] = useAddPostMutation();
+  
+    const formRef = useRef();
+  
+    const handleSubmit = async () => {
+      e.preventDefault();
+  
+      const text = formRef.current.text.value.trim();
+      if (!text.trim()) {
+        console.error("Matn bo‘sh bo‘lishi mumkin emas!");
         return;
       }
-
+  
       try {
-        const res = await axios.get(
-          `https://nt-devconnector.onrender.com/api/posts/${postId}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "X-Auth-Token": token,
-            },
-          }
-        );
-        setPost(res.data);
-        setComments(res.data.comments);
-      } catch (err) {
-        console.error("Post ma'lumotini olishda xatolik:", err);
-        setError("Ma’lumot olishda xatolik yuz berdi!");
+        const response = await addPost({ text: "yangi post" }).unwrap();
+        console.log("Post qo‘shildi:", response);
+      } catch (error) {
+        console.error("Xatolik yuz berdi:", error);
       }
     };
 
-    fetchPost();
-  }, [postId, navigate]);
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     setLoading(true);
 
-  if (error) return <p>{error}</p>;
-  if (!post) return <Loading />;
+  //     const res = await axios.post(
+  //       `https://nt-devconnector.onrender.com/api/posts/comment/${postId}`,
+  //       { text },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           "X-Auth-Token": token,
+  //         },
+  //       }
+  //     );
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
+  //     toast.success("Komment muvaffaqiyatli qo'shildi!");
+  //     setComments([...comments, res.data]);
+  //     setText("");
+  //   } catch (error) {
+  //     console.error(
+  //       "Xatolik:",
+  //       error.response?.data?.msg || "Noma'lum xatolik!"
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-      const res = await axios.post(
-        `https://nt-devconnector.onrender.com/api/posts/comment/${postId}`,
-        { text },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-Auth-Token": token,
-          },
-        }
-      );
+  // const handleDeleteComment = async (commentId) => {
+  //   try {
+  //     await axios.delete(
+  //       `https://nt-devconnector.onrender.com/api/posts/comment/${postId}/${commentId}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           "X-Auth-Token": token,
+  //         },
+  //       }
+  //     );
 
-      toast.success("Komment muvaffaqiyatli qo'shildi!");
-      setComments([...comments, res.data]);
-      setText("");
-    } catch (error) {
-      console.error(
-        "Xatolik:",
-        error.response?.data?.msg || "Noma'lum xatolik!"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDeleteComment = async (commentId) => {
-    try {
-      await axios.delete(
-        `https://nt-devconnector.onrender.com/api/posts/comment/${postId}/${commentId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-Auth-Token": token,
-          },
-        }
-      );
-
-      setComments(comments.filter((comment) => comment._id !== commentId));
-      toast.success("Komment o‘chirildi!");
-    } catch (error) {
-      console.error(
-        "Xatolik:",
-        error.response?.data?.msg || "Komment o‘chirilmadi!"
-      );
-    }
-  };
+  //     setComments(comments.filter((comment) => comment._id !== commentId));
+  //     toast.success("Komment o‘chirildi!");
+  //   } catch (error) {
+  //     console.error(
+  //       "Xatolik:",
+  //       error.response?.data?.msg || "Komment o‘chirilmadi!"
+  //     );
+  //   }
+  // };
 
   return (
     <>
@@ -130,7 +156,7 @@ const Card = () => {
                 Posted on {new Date(post.date).toLocaleDateString("uz-UZ")}
               </p>
               <div className="flex gap-[8px] items-center">
-                <LikeButton postId={post._id} token={token} />
+                {/* <LikeButton postId={post._id} token={token} /> */}
                 <button className="w-[119px] bg-[#17a2b8] text-white h-[38.4px] p-[7px] border-[#17a2b8]">
                   Discussion
                 </button>
@@ -146,15 +172,15 @@ const Card = () => {
               rows="3"
               className="w-[1036px] outline-none p-2 border rounded"
             />
-          <button
-            className=" cursor-pointer w-[100px] h-[40px] my-[10px] bg-[#343a40] text-white"
-            type="submit"
-          >
-            Submit
-          </button>
+            <button
+              className=" cursor-pointer w-[100px] h-[40px] my-[10px] bg-[#343a40] text-white"
+              type="submit"
+            >
+              Submit
+            </button>
           </form>
           <div className=" w-[1036px]">
-            {comments.length === 0 ? (
+            {/* {comments.length === 0 ? (
               <p className="text-gray-500">Hali hech qanday komment yo‘q.</p>
             ) : (
               comments.map((comment) => (
@@ -190,7 +216,7 @@ const Card = () => {
                   </div>
                 </div>
               ))
-            )}
+            )} */}
           </div>
         </div>
       </div>
